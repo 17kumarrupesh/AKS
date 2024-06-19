@@ -1,1 +1,53 @@
+variables:
+  # Replace with your Azure subscription ID
+  azureSubscriptionId: '${{variables.ARM_SUBSCRIPTION_ID}}'
+  # Replace with the resource group name (or use a variable)
+  resourceGroupName: 'my-resource-group'
+  # Replace with the desired Azure region
+  location: 'East US'
+  # Replace with a desired cluster name
+  clusterName: 'my-aks-cluster'
+  # Replace with a desired node pool name
+  nodePoolName: 'my-node-pool'
 
+jobs:
+- job: AKS_Provisioning
+  pool:
+    # Choose an appropriate agent pool with Terraform installed
+    vmImage: 'ubuntu-latest'
+  steps:
+  - script: |
+      # Configure Azure Service Principal credentials (replace with actual values)
+      export ARM_CLIENT_ID= '${{variables.ARM_CLIENT_ID}}'
+      export ARM_CLIENT_SECRET='${{variables.ARM_CLIENT_SECRET}}'
+      export ARM_TENANT_ID='${{variables.ARM_TENANT_ID}}'
+      echo "ARM_CLIENT_ID=${ARM_CLIENT_ID}"  # Mask secrets in logs (optional)
+      echo "ARM_TENANT_ID=${ARM_TENANT_ID}"  # Mask secrets in logs (optional)
+
+      # Login to Azure using Service Principal credentials
+      az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+
+      # Set working directory
+      cd /path/to/your/terraform/directory
+
+      # Initialize Terraform
+      terraform init
+
+      # Validate Terraform configuration
+      terraform validate
+
+      # Run Terraform apply (consider using a separate stage for production)
+      terraform apply --auto-approve
+
+  - script: |
+      # Get the kubeconfig output from Terraform
+      kubeconfig=$(azurerm_kubernetes_cluster.aks_cluster.kube_config)
+
+      # Decode the base64 encoded kubeconfig
+      echo "$kubeconfig" | base64 --decode > kubeconfig.yaml
+
+      # Configure kubectl with the decoded kubeconfig
+      kubectl config set-credentials aks-user --kubeconfig kubeconfig.yaml
+
+      # Verify connection to the AKS cluster (optional)
+      kubectl get nodes
