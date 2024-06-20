@@ -26,9 +26,15 @@ jobs:
 
       # Login to Azure using Service Principal credentials
       az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+         
+      # Install Terraform
+      curl -sSL https://releases.hashicorp.com/terraform/$(terraformVersion)/terraform_$(terraformVersion)_linux_amd64.zip -o terraform.zip
+      unzip terraform.zip
+      sudo mv terraform /usr/local/bin/
+      
 
       # Set working directory
-      cd /path/to/your/terraform/directory
+      #cd /path/to/your/terraform/directory
 
       # Initialize Terraform
       terraform init
@@ -38,6 +44,7 @@ jobs:
 
       # Run Terraform apply (consider using a separate stage for production)
       terraform apply --auto-approve
+      workingDirectory: '$(Build.SourcesDirectory)'
 
        
 
