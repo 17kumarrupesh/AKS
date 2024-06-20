@@ -24,17 +24,10 @@ jobs:
       echo "ARM_CLIENT_ID=${ARM_CLIENT_ID}"  # Mask secrets in logs (optional)
       echo "ARM_TENANT_ID=${ARM_TENANT_ID}"  # Mask secrets in logs (optional)
 
-      # Login to Azure using Service Principal credentials
-
-        
-      # Install Terraform
+     # Install Terraform
       curl -sSL https://releases.hashicorp.com/terraform/$(terraformVersion)/terraform_$(terraformVersion)_linux_amd64.zip -o terraform.zip
       unzip terraform.zip
-      sudo mv terraform /usr/local/bin/
-      
-
-      # Set working directory
-      #cd /path/to/your/terraform/directory
+      sudo mv terraform /usr/local/bin/      
 
       # Initialize Terraform
       terraform init
@@ -47,9 +40,7 @@ jobs:
           inputs:
           command: apply
           azureSubscription: 'rkterraformconnection'          
-          workingDirectory: '$(Build.SourcesDirectory)'
-
-       
+          workingDirectory: '$(Build.SourcesDirectory)'       
 
   - script: |
       # Get the kubeconfig output from Terraform
