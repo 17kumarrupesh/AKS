@@ -16,9 +16,11 @@ variable "cluster_name" {
 variable "node_vm_size" {
   description = "Size of the VMs in the AKS cluster node pool"
   type = string
+  default = 'B1s'
 }
 
 variable "number_of_nodes" {
   description = "Number of nodes in the AKS cluster node pool"
   type = number
+  default = '2'
 }
