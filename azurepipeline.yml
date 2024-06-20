@@ -39,6 +39,10 @@ jobs:
       # Run Terraform apply (consider using a separate stage for production)
       terraform apply --auto-approve
 
+      env:
+        TF_VAR_resource_group_name: $(resource_group_name)
+        
+
   - script: |
       # Get the kubeconfig output from Terraform
       kubeconfig=$(azurerm_kubernetes_cluster.aks_cluster.kube_config)
