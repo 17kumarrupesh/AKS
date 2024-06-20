@@ -2,13 +2,13 @@ variables:
   # Replace with your Azure subscription ID
   azureSubscriptionId: '${{variables.ARM_SUBSCRIPTION_ID}}'
   # Replace with the resource group name (or use a variable)
-  resourceGroupName: 'my-resource-group'
+  #resourceGroupName: 'my-resource-group'
   # Replace with the desired Azure region
-  location: 'East US'
+  #location: 'East US'
   # Replace with a desired cluster name
-  clusterName: 'my-aks-cluster'
+  #clusterName: 'my-aks-cluster'
   # Replace with a desired node pool name
-  nodePoolName: 'my-node-pool'
+  #nodePoolName: 'my-node-pool'
 
 jobs:
 - job: AKS_Provisioning
@@ -39,9 +39,7 @@ jobs:
       # Run Terraform apply (consider using a separate stage for production)
       terraform apply --auto-approve
 
-      env:
-        TF_VAR_resource_group_name: $(resource_group_name)
-        
+       
 
   - script: |
       # Get the kubeconfig output from Terraform
