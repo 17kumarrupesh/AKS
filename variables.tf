@@ -13,6 +13,11 @@ variable "cluster_name" {
   type = string
 }
 
+variable "dns_prefix_name" {
+  description = "Name of the AKS "
+  type = string
+}
+
 variable "node_vm_size" {
   description = "Size of the VMs in the AKS cluster node pool"
   type = string
