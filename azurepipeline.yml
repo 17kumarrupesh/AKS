@@ -25,7 +25,11 @@ jobs:
       echo "ARM_TENANT_ID=${ARM_TENANT_ID}"  # Mask secrets in logs (optional)
 
       # Login to Azure using Service Principal credentials
-      az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+
+  - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'rkterraformconnection'
+        scriptType: 'bash'
          
       # Install Terraform
       curl -sSL https://releases.hashicorp.com/terraform/$(terraformVersion)/terraform_$(terraformVersion)_linux_amd64.zip -o terraform.zip
